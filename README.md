@@ -1,4 +1,9 @@
 # Snake Game (Terminal-Based)
+Group Members:
+Monil Rathod-202101409
+Manush Jada-202401070
+Utsav Darji-202401044
+Hitansh Patel-202401069
 
 ## Introduction
 This is a terminal-based Snake game built using standard C++ features without any external libraries beyond basic input/output functions. The game runs in a Windows console and uses Unicode characters for graphical representation. The snake moves continuously, and the player can change its direction using the keyboard.
