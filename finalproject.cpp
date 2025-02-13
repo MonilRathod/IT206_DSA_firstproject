@@ -1,25 +1,21 @@
 #include <bits/stdc++.h>
-#include <conio.h>  // For _kbhit() and _getch()
-
+#include <conio.h>
 
 using namespace std;
 
-// Unicode characters for rendering
-const wchar_t SNAKE_BODY = 0x2588;  // Full Block '█'
-const wchar_t FOOD = 0x25A0;        // Black Square '■'
-const wchar_t EMPTY = L' ';         // Empty space
-const wchar_t BORDER = 0x2593;      // Dark Shade '▓'
+const wchar_t SNAKE_BODY = 0x2588;
+const wchar_t FOOD = 0x25A0;
+const wchar_t EMPTY = L' ';
+const wchar_t BORDER = 0x2593;
 
 const int GRID_SIZE = 20;
 
-// Function to clear the screen
 void clearScreen() {
-    system("cls");  // Clear screen for Windows
+    system("cls");
 }
 
-// Function to enable Unicode output in the console
 void enableUnicode() {
-    setlocale(LC_ALL, "");  // Enable Unicode output
+    setlocale(LC_ALL, "");
 }
 
 class Snake {
@@ -92,18 +88,18 @@ public:
         for (int i = 0; i <= GRID_SIZE + 1; ++i) {
             for (int j = 0; j <= GRID_SIZE + 1; ++j) {
                 if (i == 0 || i == GRID_SIZE + 1 || j == 0 || j == GRID_SIZE + 1) {  
-                    wcout << BORDER << BORDER;  // Draw border
+                    wcout << BORDER << BORDER;
                 } else {
                     bool isSnake = false;
                     for (auto segment : snake.body) {
                         if (segment.first == i - 1 && segment.second == j - 1) {
-                            wcout << SNAKE_BODY << SNAKE_BODY;  // Draw snake
+                            wcout << SNAKE_BODY << SNAKE_BODY;
                             isSnake = true;
                             break;
                         }
                     }
                     if (!isSnake) {
-                        if (food.first == i - 1 && food.second == j - 1) wcout << FOOD << FOOD;  // Draw food
+                        if (food.first == i - 1 && food.second == j - 1) wcout << FOOD << FOOD;
                         else wcout << EMPTY << EMPTY;
                     }
                 }
@@ -114,8 +110,8 @@ public:
     }
 
     void handleInput() {
-        if (_kbhit()) {  // Check if a key was pressed
-            char key = _getch();  // Get the key press without waiting for Enter
+        if (_kbhit()) {
+            char key = _getch();
 
             if ((key == 'w' || key == 'W') && snake.direction != 'D') snake.direction = 'U';
             else if ((key == 's' || key == 'S') && snake.direction != 'U') snake.direction = 'D';
@@ -125,7 +121,7 @@ public:
     }
 
     void update() {
-        handleInput();  // Read input if available
+        handleInput();
 
         bool grow = (snake.body[0] == food);
         if (grow) {
@@ -146,28 +142,27 @@ public:
     }
 
     bool gameOverScreen() {
-    system("cls");
-    cout << "#############################################\n";
-    cout << "#                                           #\n";
-    cout << "#                GAME OVER                  #\n";
-    cout << "#                                           #\n";
-    cout << "#############################################\n";
-    cout << "\nFinal Score: " << score << endl;
-    cout << "Press R to restart or E to exit...\n";
+        system("cls");
+        cout << "#############################################\n";
+        cout << "#                                           #\n";
+        cout << "#                GAME OVER                  #\n";
+        cout << "#                                           #\n";
+        cout << "#############################################\n";
+        cout << "\nFinal Score: " << score << endl;
+        cout << "Press R to restart or E to exit...\n";
 
-    while (true) {  // Loop until a valid choice is made
-        char choice = _getch();  // Wait for key press
+        while (true) {
+            char choice = _getch();
 
-        if (choice == 'r' || choice == 'R') {
-            return true;  // Restart the game
-        } else if (choice == 'e' || choice == 'E') {
-            return false;  // Exit the game
-        } else {
-            // If the key is not 'R' or 'E', ignore it and wait for a valid key
-            continue;
+            if (choice == 'r' || choice == 'R') {
+                return true;
+            } else if (choice == 'e' || choice == 'E') {
+                return false;
+            } else {
+                continue;
+            }
         }
     }
-}
 
     void resetGame() {
         snake = Snake();
@@ -185,15 +180,15 @@ void showStartScreen() {
     wcout << L"#############################################\n";
     wcout << L"\nControls: W = Up, S = Down, A = Left, D = Right\n";
     wcout << L"Press any key to start...";
-    _getch();  // Wait for key press
+    _getch();
 }
 
 void delay() {
-    for (volatile long long i = 0; i < 100000000; i++);  // Adjust for game speed
+    for (volatile long long i = 0; i < 100000000; i++);
 }
 
 int main() {
-    enableUnicode(); // Enable Unicode output in console
+    enableUnicode();
     srand(time(0));
 
     showStartScreen();
@@ -202,14 +197,14 @@ int main() {
     while (true) {
         while (!game.gameOver) {
             game.update();
-            delay();  // Controls game speed
+            delay();
         }
 
         if (!game.gameOverScreen()) {
-            break;  // Exit the game if the player does not restart
+            break;
         }
 
-        game.resetGame();  // Restart the game
+        game.resetGame();
     }
 
     return 0;
