@@ -3,10 +3,12 @@
 
 using namespace std;
 
+int highScore = 0;
+
 const wchar_t SNAKE_BODY = 0x2588;
-const wchar_t FOOD = 0x25A0;
-const wchar_t EMPTY = L' ';
-const wchar_t BORDER = 0x2593;
+const wchar_t FOOD       = 0x25A0;
+const wchar_t EMPTY      = L' ';
+const wchar_t BORDER     = 0x2593;
 
 const int GRID_SIZE = 20;
 
@@ -33,22 +35,27 @@ public:
     void move(bool grow) {
         pair<int, int> newHead = body[0];
 
-        if (direction == 'U') newHead.first--;
+        if (direction == 'U')      newHead.first--;
         else if (direction == 'D') newHead.first++;
         else if (direction == 'L') newHead.second--;
         else if (direction == 'R') newHead.second++;
 
         body.insert(body.begin(), newHead);
-        if (!grow) body.pop_back();
+        if (!grow) {
+            body.pop_back();
+        }
     }
 
     bool checkCollision() {
         pair<int, int> head = body[0];
-        if (head.first < 0 || head.first >= GRID_SIZE || head.second < 0 || head.second >= GRID_SIZE) {
+        if (head.first < 0 || head.first >= GRID_SIZE ||
+            head.second < 0 || head.second >= GRID_SIZE) {
             return true;
         }
         for (size_t i = 1; i < body.size(); i++) {
-            if (body[i] == head) return true;
+            if (body[i] == head) {
+                return true;
+            }
         }
         return false;
     }
@@ -70,7 +77,7 @@ public:
     void generateFood() {
         bool validPosition = false;
         while (!validPosition) {
-            food.first = rand() % GRID_SIZE;
+            food.first  = rand() % GRID_SIZE;
             food.second = rand() % GRID_SIZE;
             validPosition = true;
             for (auto segment : snake.body) {
@@ -87,7 +94,8 @@ public:
         wcout << L"\n";
         for (int i = 0; i <= GRID_SIZE + 1; ++i) {
             for (int j = 0; j <= GRID_SIZE + 1; ++j) {
-                if (i == 0 || i == GRID_SIZE + 1 || j == 0 || j == GRID_SIZE + 1) {  
+                if (i == 0 || i == GRID_SIZE + 1 ||
+                    j == 0 || j == GRID_SIZE + 1) {
                     wcout << BORDER << BORDER;
                 } else {
                     bool isSnake = false;
@@ -99,14 +107,18 @@ public:
                         }
                     }
                     if (!isSnake) {
-                        if (food.first == i - 1 && food.second == j - 1) wcout << FOOD << FOOD;
-                        else wcout << EMPTY << EMPTY;
+                        if (food.first == i - 1 && food.second == j - 1) {
+                            wcout << FOOD << FOOD;
+                        } else {
+                            wcout << EMPTY << EMPTY;
+                        }
                     }
                 }
             }
             wcout << L"\n";
         }
-        wcout << L"\nScore: " << score;
+        wcout << L"\nScore: " << score
+              << L"   High Score: " << highScore;
     }
 
     void handleInput() {
@@ -143,17 +155,22 @@ public:
 
     bool gameOverScreen() {
         system("cls");
+
+        if (score > highScore) {
+            highScore = score;
+        }
+
         cout << "#############################################\n";
         cout << "#                                           #\n";
         cout << "#                GAME OVER                  #\n";
         cout << "#                                           #\n";
         cout << "#############################################\n";
         cout << "\nFinal Score: " << score << endl;
+        cout << "High Score: " << highScore << endl;
         cout << "Press R to restart or E to exit...\n";
 
         while (true) {
             char choice = _getch();
-
             if (choice == 'r' || choice == 'R') {
                 return true;
             } else if (choice == 'e' || choice == 'E') {
